@@ -60,12 +60,6 @@ ALTER USER 'my_user'@'%' IDENTIFIED WITH mysql_native_password BY '$my_password'
 现在你就可以愉快的在本地用 MySQL 客户端连接 3305 端口了。
 
 
-## podman 安装 MySQL 8.0  (其他同理，比如创建用户允许远程登录)
-```bash
-podman run -itd --name mysql-8 -p 3308:3306 -e MYSQL_ROOT_PASSWORD=$my_password mysql:8.0.32
-```
-
-
 ## podman stop 停止容器
 ```bash
 podman stop percona-5.7
@@ -76,6 +70,19 @@ podman stop percona-5.7
 podman start percona-5.7
 ```
 
+
+
+## podman 安装 MySQL 8.0 (容器的 3306 端口指向本地的 3308 端口)
+```bash
+podman run -itd --name mysql-8 -p 3308:3306 -e MYSQL_ROOT_PASSWORD=$my_password mysql:8.0.32
+```
+
+## podman 安装 MySQL 5.7 (容器的 3306 端口指向本地的 3306 端口)
+```bash
+podman run -itd --name mysql-5.7 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$my_password  mysql:5.7.35
+```
+
+同样的，如果要远程连接，需要进入容器中，登录上 MySQL 服务，然后新建一个用户（一般不要修改 root 用户的权限！），并给它分配远程连接的权限。
 
 
 
