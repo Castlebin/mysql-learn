@@ -49,6 +49,7 @@ select host,user,plugin,authentication_string from mysql.user;
 ```sql
 create user 'my_user'@'%' identified by '$my_password';
 grant all privileges on *.* to 'my_user'@'%';
+-- flush privileges;
 ```
 或者
 ```sql
@@ -58,6 +59,11 @@ ALTER USER 'my_user'@'%' IDENTIFIED WITH mysql_native_password BY '$my_password'
 
 现在你就可以愉快的在本地用 MySQL 客户端连接 3305 端口了。
 
+
+## podman 安装 MySQL 8.0  (其他同理，比如创建用户允许远程登录)
+```bash
+podman run -itd --name mysql-8 -p 3308:3306 -e MYSQL_ROOT_PASSWORD=$my_password mysql:8.0.32
+```
 
 
 ## podman stop 停止容器
