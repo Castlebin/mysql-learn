@@ -28,6 +28,24 @@ podman run -itd --name percona-5.7 -p 3305:3306 -e MYSQL_ROOT_PASSWORD=$my_passw
 
 之后就可以开始愉快的在本地做实验了
 
+## podman exec 进入容器
+```bash
+podman exec -it percona-5.7 bash
+```
+进入上面启动好的 percona-5.7 容器，打开它的 bash 终端。
+
+
+
+## podman stop 停止容器
+```bash
+podman stop percona-5.7
+```
+
+## podman start 启动容器
+```bash
+podman start percona-5.7
+```
+
 
 
 
