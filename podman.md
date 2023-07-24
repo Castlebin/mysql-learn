@@ -26,13 +26,37 @@ podman info
 podman run -itd --name percona-5.7 -p 3305:3306 -e MYSQL_ROOT_PASSWORD=$my_password percona:5.7.35
 ```
 
-之后就可以开始愉快的在本地做实验了
+现在这个时候，使用 MySQL 客户端连接 3305 端口，发现是连接不上的。因为MySQL 容器默认只允许本地连接。所以我们需要进入容器中，登录上 MySQL 服务，然后新建一个用户（不要修改 root 用户的权限！），并给它分配远程连接的权限。
 
 ## podman exec 进入容器
 ```bash
 podman exec -it percona-5.7 bash
 ```
 进入上面启动好的 percona-5.7 容器，打开它的 bash 终端。
+
+## podman exec 进入容器中的 MySQL
+```bash
+mysql -uroot -p$my_password
+```
+
+## 查看当前的用户和权限
+```sql
+select host,user,plugin,authentication_string from mysql.user;
+```
+可以看到 root 用户当前是只允许 在 localhost 上登录的。
+
+## 创建一个新的 MySQL 用户，并且给它分配权限
+```sql
+create user 'my_user'@'%' identified by '$my_password';
+grant all privileges on *.* to 'my_user'@'%';
+```
+或者
+```sql
+create user my_user;
+ALTER USER 'my_user'@'%' IDENTIFIED WITH mysql_native_password BY '$my_password'
+```
+
+现在你就可以愉快的在本地用 MySQL 客户端连接 3305 端口了。
 
 
 
